@@ -131,6 +131,7 @@ while True:
 			if data_window:
 				data_window.close()
 			data_window = create_data_window()
+			window.hide()
 			# Start decoding from the beginning of this connection. The first
 			# received byte is provisionally treated as the status register.
 			raw_bytes.clear()
@@ -147,12 +148,14 @@ while True:
 		# This button only reopens the monitor for a live serial connection.
 		if connection and connection.is_open and not data_window:
 			data_window = create_data_window()
+			window.hide()
 			update_data_window(data_window, raw_bytes, status_byte, value_bytes)
 	elif event == "-TEST-WINDOW-":
 		# Preview the same window without opening a serial port. No fake serial
 		# data is generated; this is only for checking the window layout.
 		if not data_window:
 			data_window = create_data_window()
+			window.hide()
 			update_data_window(data_window, raw_bytes, status_byte, value_bytes)
 		if not connection or not connection.is_open:
 			window["-STATUS-"].update("Test window opened without a serial connection")
@@ -164,6 +167,7 @@ while True:
 		if data_event == sg.WIN_CLOSED:
 			data_window.close()
 			data_window = None
+			window.un_hide()
 
 	# in_waiting is the number of bytes already buffered by the serial driver.
 	# This condition avoids a read when there is no connection or no new input.
